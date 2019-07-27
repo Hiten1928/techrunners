@@ -21,7 +21,7 @@ public class Matrix {
 	ArrayList<ArrayList<DocP>> docLists;
 	double[] docLength;
 	ArrayList<String> reformedquery;
-	String folderN="C:\\Users\\Vismay\\eclipse-workspace\\WebApp01\\Small_set";
+	String folderN="/Users/patil.gourang/Downloads/techrunners-master/WebApp01/Small_set";
 	
 	public Matrix() {
 		
@@ -148,9 +148,39 @@ public class Matrix {
 		int termId=0;
 		while(termId <reformedquery.size()) {
 			int index = termList.indexOf(reformedquery.get(termId));
-			if(index <0) {
-				termId++;
-				continue;
+			if(index < 0) {
+				List<String> correctterms=findNEditAwayTerms(reformedquery.get(termId), 1);
+				for(String t:correctterms) {
+					System.out.println("did you mean ? " + t);
+					
+				}
+				if(correctterms== null || correctterms.isEmpty())
+				{
+					System.out.println("No valid closest term found");
+					termId++;
+					continue;
+				} else {
+					int bestCorrectTermIndex = getTermWithHighestDocs(correctterms);
+					if(bestCorrectTermIndex == -1) {
+						termId++;
+						continue;
+					}
+					else
+					{
+						if(correctterms.get(bestCorrectTermIndex).isEmpty() || correctterms.get(bestCorrectTermIndex).equals(""))
+						{
+							System.out.println("No valid closest term found");
+							termId++;
+							continue;
+						}
+						else {
+						System.out.println("Closest Term : "+ correctterms.get(bestCorrectTermIndex));
+						reformedquery.set(termId, correctterms.get(bestCorrectTermIndex));
+						continue;
+						}
+					}
+				}
+				
 			}
 			docList = docLists.get(index);
 			double t_w = Math.log(myDocs.length*1.0/docList.size()*1.0);
@@ -210,5 +240,77 @@ public class Matrix {
 		//System.out.println("sorted hashmap:" + sorteddocs);
 		return sorteddocs;
 	}
+	
+	public int editDistDP(String str1, String str2, int m, int n) 
+    { 
+        int dp[][] = new int[m+1][n+1]; 
+       
+        for (int i=0; i<=m; i++) 
+        { 
+            for (int j=0; j<=n; j++) 
+            { 
+                if (i==0) 
+                    dp[i][j] = j; 
+                else if (j==0) 
+                    dp[i][j] = i; 
+                else if (str1.charAt(i-1) == str2.charAt(j-1)) 
+                    dp[i][j] = dp[i-1][j-1]; 
+                else
+                    dp[i][j] = 1 + min(dp[i][j-1],  
+                                       dp[i-1][j],  
+                                       dp[i-1][j-1]); 
+            } 
+        }
+        return dp[m][n]; 
+    }
+	
+	private int min(int x,int y,int z) 
+    { 
+        if (x <= y && x <= z) return x; 
+        if (y <= x && y <= z) return y; 
+        else return z; 
+    }
+	
+	private List<String >findNEditAwayTerms(String word,int n)
+	{
+		//return this.termList.stream().filter(term -> Math.abs(word.length() - term.length()) == 1).filter(term -> editDistDP(word, term, word.length(), term.length()) == n).collect(Collectors.toList());
+		//return this.termList.stream().filter(term -> editDistDP(word, term, word.length(), term.length()) == n).collect(Collectors.toList());
+		List<String> nEditAwayTerms = new ArrayList<String>();
+		this.termList.forEach(term ->
+		{
+			if(Math.abs(word.length() - term.length()) == 1){
+				if(editDistDP(word, term, word.length(), term.length()) == n) {
+					nEditAwayTerms.add(term);
+				}
+			}	
+		});
+		return nEditAwayTerms;
+	}
+	
+	private int getTermWithHighestDocs(List<String> termList)
+	{
+		if(termList == null)
+			return -1;
+		//HashMap<String,Double>[] condProb;
+		HashMap<Integer, Double> [] docs = new HashMap[termList.size()]; 
+		int i = 0;
+		for(String term : termList) {
+			docs[i++] = rankSearch(new String[]{term});
+		}
+		
+		int maxSize = -1;
+		int index = -1;
+		
+		for(int j=0; j < docs.length; j++)
+		{
+			if(docs[j].size() > maxSize)
+			{
+				maxSize = docs[j].size();
+				index = j;
+			}
+		}
+		return index;		
+	}
+	
 
 }

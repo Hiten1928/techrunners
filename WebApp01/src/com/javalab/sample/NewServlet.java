@@ -58,7 +58,6 @@ public class NewServlet extends HttpServlet {
 		System.out.println("ans:" + result);
 		
 		
-		
 		List<String> snippets = new ArrayList<String>();
 		for(Integer key: result.keySet()) {
 			out.println("documents are " + key + "\n");
