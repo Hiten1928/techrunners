@@ -22,3 +22,14 @@
 relevant to vodafone. More examples of input and expected output can be found in the document
 attached. 
 
+--Class Details
+Matrix.class 
+Contains all the core algorithm logic for the Vector Space Model.
+The constructor builds the required index and the rankSearch() function takes the query and gives the results.It also contains functions that help perform wild card search and spell check with edit distance implemented using DP.
+
+NewServlet.class
+This class is the servlet which takes the request processes the request and returns the response.
+
+The index.jsp and results.jsp are the frontend pages which take in the request and  render the response.
+
+This project is a Web Application project and hence requires an apache tomcat server which acts an an application server.
