@@ -39,6 +39,9 @@ text-align: center;
 </div>
 <div style="border:1px solid black">
 <% String[] result =  (String[]) request.getAttribute("result");
+Integer[] keys =  (Integer[]) request.getAttribute("keys");
+String folderN =  (String) request.getAttribute("folder");
+String[] doc =  (String[]) request.getAttribute("doclist");
 ArrayList<String> reformedquery = (ArrayList<String>) request.getAttribute("search");
 
 	
@@ -55,9 +58,12 @@ ArrayList<String> reformedquery = (ArrayList<String>) request.getAttribute("sear
 	}
 	
 	out.print("<br/>");
-	
+	int i=0;
+
 		for(String r:result){
-			out.println("<html><body><li style=font-size:25px;padding:10px>"+r+"</li></body></html>");
+		String Path = folderN + "/" + doc[keys[i++]-1];
+			session.setAttribute("Path", Path.toString());
+			out.println("<html><body><a href=/techrunner/document.jsp?path="+Path.toString()+"><li style=font-size:15px;padding:5px>"+r+"</li></a></body></html>");
 			out.println("<br/><br/><br/><br/>");
 		}
 

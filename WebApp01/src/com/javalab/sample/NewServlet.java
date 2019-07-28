@@ -77,15 +77,11 @@ public class NewServlet extends HttpServlet {
 		
 		
 		String[] finalans = snippets.toArray(new String[snippets.size()]);
-		for(String s:finalans) {
-			//out.println(s);
-			//request.setAttribute("result", s);
-			
-			//out.println("-------------------------------------------------------");
-			//out.println();
-		}
 		request.setAttribute("result", finalans);
 		request.setAttribute("search", m.reformedquery);
+		request.setAttribute("keys", keys);
+		request.setAttribute("folder", m.folderN);
+		request.setAttribute("doclist", m.myDocs);
 		request.getRequestDispatcher("results.jsp").forward(request, response);
 		
 		//request.setAttribute("result", finalans);
