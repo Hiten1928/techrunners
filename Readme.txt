@@ -28,8 +28,10 @@ Contains all the core algorithm logic for the Vector Space Model.
 The constructor builds the required index and the rankSearch() function takes the query and gives the results.It also contains functions that help perform wild card search and spell check with edit distance implemented using DP.
 
 NewServlet.class
-This class is the servlet which takes the request processes the request and returns the response.
+This class is the servlet which takes the request processes the request and returns the response.This class also sets the parameters for the subsequent JSP pages(document.jsp)
 
-The index.jsp and results.jsp are the frontend pages which take in the request and  render the response.
+The index.jsp and results.jsp  are the frontend pages which take in the request and  render the response.
+
+The document.jsp page will allow the user to view the full document as the results page will show only the first line of the retrieved document
 
 This project is a Web Application project and hence requires an apache tomcat server which acts an an application server.
